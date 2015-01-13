@@ -8,10 +8,7 @@ import java.util.*;
  */
 public class HeuristicBot {
 
-	private static class Pair {
-		Planet source;
-		Planet dest;
-	}
+	private static int PREDICTED_TURNS = 2;
 
 	/**
 	 * Function that gets called every turn. This is where to implement the
@@ -19,53 +16,69 @@ public class HeuristicBot {
 	 */
 	public static void DoTurn(PlanetWars pw) {
 
-		int myGrowthRate = 0;
-		int enemyGrowthRate = 0;
 		int myShips = 0;
 		int enemyShips = 0;
+		int myGrowthRate = 0;
+		int enemyGrowthRate = 0;
+
 		for (Planet p : pw.Planets()) {
 			if (p.Owner() == 1) {
-				myGrowthRate = myGrowthRate + p.GrowthRate();
 				myShips = myShips + p.NumShips();
+				myGrowthRate = myGrowthRate + p.GrowthRate();
 			} else if (p.Owner() > 1) {
-				enemyGrowthRate = enemyGrowthRate + p.GrowthRate();
 				enemyShips = enemyShips + p.NumShips();
+				enemyGrowthRate = enemyGrowthRate + p.GrowthRate();
 			}
 		}
 
-		Planet source = pw.MyPlanets().get(0);
-		Planet dest = pw.Planets().get(0);
+		Planet source = null;
+		Planet dest = null;
+		int bestScore = Integer.MIN_VALUE;
+		for (Planet s : pw.MyPlanets()) {
+			for (Planet d : pw.Planets()) {
+				if (s.PlanetID() == d.PlanetID()) {
+					continue;
+				}
+				if (score(s, d) > bestScore){
+					source = s;
+					dest = d;
+				}
 
-		int distance = pw.Distance(source.PlanetID(), dest.PlanetID());
-
-		// After the attack
-		int shipsAtDest = dest.NumShips();
-		if (dest.Owner() != 0) {
-			shipsAtDest += dest.GrowthRate() * distance;
+			}
 		}
-		if (dest.Owner() == 1) {
-			shipsAtDest += (source.NumShips() / 2);
-		}else {
-			shipsAtDest = (source.NumShips() / 2) - shipsAtDest;
-		}
-		int myShipsAtDest = shipsAtDest > 0 ? shipsAtDest : 0;
-
-		int myShipsAtSource = source.NumShips() / 2 + source.GrowthRate() * distance;
-		int myShipsAfterAttack = myShipsAtSource + myShipsAtDest;
-
-		// (1) implement an algorithm to determine the source planet to send
-		// your ships from
-		// ... code here
-
-		// (2) implement an algorithm to deterimen the destination planet to
-		// send your ships to
-		// ... code here
 
 		// (3) Attack
 		if (source != null && dest != null) {
 			pw.IssueOrder(source, dest);
 		}
 
+	}
+
+	private static int score(Planet source, Planet dest) {
+		if (dest.Owner() == 1) {
+			return 0;
+		}
+		int myShipDelta = 0;
+		int enemyShipDelta = 0;
+		int myGrowthRateDelta = 0;
+		int enemyGrowthRateDelta = 0;
+
+		int attackingShips = source.NumShips() / 2;
+
+		if (dest.NumShips() > attackingShips) {
+			myShipDelta -= attackingShips;
+		} else {
+			myShipDelta -= dest.NumShips();
+			myGrowthRateDelta += dest.GrowthRate();
+			if (dest.Owner() > 1) {
+				enemyShipDelta -= dest.NumShips();
+				enemyGrowthRateDelta -= dest.GrowthRate();
+			}
+		}
+
+		int myPredictedShips = myShipDelta + (myGrowthRateDelta * PREDICTED_TURNS);
+		int predictedEnemyShips = enemyShipDelta + (enemyGrowthRateDelta * PREDICTED_TURNS);
+		return myPredictedShips - predictedEnemyShips;
 	}
 
 	public static void main(String[] args) {
