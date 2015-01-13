@@ -39,9 +39,12 @@ public class HeuristicBot {
 				if (s.PlanetID() == d.PlanetID()) {
 					continue;
 				}
-				if (score(s, d) > bestScore){
+				int score = score(s, d);
+				if (score > bestScore){
 					source = s;
 					dest = d;
+					bestScore = score;
+					pw.log("Source:", s.PlanetID(), "Dest:", d.PlanetID(), "Score:", score);
 				}
 
 			}
