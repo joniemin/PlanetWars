@@ -3,16 +3,17 @@ import java.io.StringWriter;
 import java.util.*;
 
 /*
-	 RandomBot - an example bot that picks up one of his planets and send half of the ships 
-	 from that planet to a random target planet.
+ RandomBot - an example bot that picks up one of his planets and send half of the ships 
+ from that planet to a random target planet.
 
-	 Not a very clever bot, but showcases the functions that can be used.
-	 Overcommented for educational purposes.
-	 */
+ Not a very clever bot, but showcases the functions that can be used.
+ Overcommented for educational purposes.
+ */
 public class RandomBot {
 
 	/*
-	 * Function that gets called every turn. This is where to implement the strategies.
+	 * Function that gets called every turn. This is where to implement the
+	 * strategies.
 	 */
 
 	public static void DoTurn(PlanetWars pw) {
@@ -26,8 +27,10 @@ public class RandomBot {
 		// (1a) Take the list of my planets
 		List<Planet> myPlanets = pw.MyPlanets();
 
-		//An example debug statement. These statements are useful when you don't understand the behaviour of your bot.
-		pw.log("I have", myPlanets.size(), "planets. (example debug statement, you can remove or change me!)");
+		// An example debug statement. These statements are useful when you
+		// don't understand the behaviour of your bot.
+		pw.log("I have", myPlanets.size(),
+				"planets. (example debug statement, you can remove or change me!)");
 
 		// (1b) If the list is not empty:
 		if (myPlanets.size() > 0) {
@@ -66,20 +69,20 @@ public class RandomBot {
 		try {
 			while ((c = System.in.read()) >= 0) {
 				switch (c) {
-					case '\n':
-						if (line.equals("go")) {
-							PlanetWars pw = new PlanetWars(message);
-							DoTurn(pw);
-							pw.FinishTurn();
-							message = "";
-						} else {
-							message += line + "\n";
-						}
-						line = "";
-						break;
-					default:
-						line += (char) c;
-						break;
+				case '\n':
+					if (line.equals("go")) {
+						PlanetWars pw = new PlanetWars(message);
+						DoTurn(pw);
+						pw.FinishTurn();
+						message = "";
+					} else {
+						message += line + "\n";
+					}
+					line = "";
+					break;
+				default:
+					line += (char) c;
+					break;
 				}
 			}
 		} catch (Exception e) {
@@ -87,7 +90,7 @@ public class RandomBot {
 			e.printStackTrace(new PrintWriter(writer));
 			String stackTrace = writer.toString();
 			System.err.println(stackTrace);
-			System.exit(1); //just stop now. we've got a problem
+			System.exit(1); // just stop now. we've got a problem
 		}
 	}
 }

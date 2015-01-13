@@ -23,27 +23,34 @@ import java.util.*;
  */
 
 public class AdaptiveBot {
-	
+
 	/**
-	 * The main method for issuing your commands. Here, the best strategy is selected depending on the environment characteristics
+	 * The main method for issuing your commands. Here, the best strategy is
+	 * selected depending on the environment characteristics
+	 * 
 	 * @param pw
 	 */
 	public static void DoTurn(PlanetWars pw) {
-				
-		//Retrieve environment characteristics
-		//Are there characteristics you want to use instead, or are there more you'd like to use? Try it out!
+
+		// Retrieve environment characteristics
+		// Are there characteristics you want to use instead, or are there more
+		// you'd like to use? Try it out!
 		int neutralPlanets = pw.NeutralPlanets().size();
 		int totalPlanetSize = 0;
 		for (Planet p : pw.NeutralPlanets()) {
 			totalPlanetSize += p.GrowthRate();
 		}
-		int averagePlanetSize = Math.round(totalPlanetSize/pw.NeutralPlanets().size());
-			
-		//Use AdaptivityMap to get the bot which matches the current environment characteristics  
-		String thisTurnBot = AdaptivityMap.get(neutralPlanets, averagePlanetSize);
-		
+		int averagePlanetSize = Math.round(totalPlanetSize
+				/ pw.NeutralPlanets().size());
+
+		// Use AdaptivityMap to get the bot which matches the current
+		// environment characteristics
+		String thisTurnBot = AdaptivityMap.get(neutralPlanets,
+				averagePlanetSize);
+
 		if (thisTurnBot == null) {
-			System.err.println("WARNING: You have not entered bot data for this case. Using default bot");
+			System.err
+					.println("WARNING: You have not entered bot data for this case. Using default bot");
 			DoRandomBotTurn(pw);
 		} else {
 			if (thisTurnBot.equals("BullyBot")) {
@@ -53,21 +60,25 @@ public class AdaptiveBot {
 				System.err.println("RandomBot is going to play this turn");
 				DoRandomBotTurn(pw);
 			} else {
-				System.err.println("WARNING: Adaptivity map wants " + thisTurnBot +
-									" to play this turn, but this strategy is not implemented in this bot! Using default bot");
+				System.err
+						.println("WARNING: Adaptivity map wants "
+								+ thisTurnBot
+								+ " to play this turn, but this strategy is not implemented in this bot! Using default bot");
 				DoRandomBotTurn(pw);
 			}
 		}
 	}
-	
+
 	/**
-	 * Implementation of the bullybot strategy (copy pasted from the regular BullyBot.java)
+	 * Implementation of the bullybot strategy (copy pasted from the regular
+	 * BullyBot.java)
+	 * 
 	 * @param pw
 	 */
 	public static void DoBullyBotTurn(PlanetWars pw) {
 		Planet source = null;
 		double sourceScore = Double.MIN_VALUE;
-		//Select my strongest planet to send ships from
+		// Select my strongest planet to send ships from
 		for (Planet myPlanet : pw.MyPlanets()) {
 			if (myPlanet.NumShips() <= 1)
 				continue;
@@ -77,10 +88,10 @@ public class AdaptiveBot {
 				source = myPlanet;
 			}
 		}
-		
+
 		Planet dest = null;
 		double destScore = Double.MAX_VALUE;
-		//Select weakest destination planet
+		// Select weakest destination planet
 		for (Planet notMyPlanet : pw.NotMyPlanets()) {
 			double score = (double) (notMyPlanet.NumShips());
 
@@ -89,31 +100,33 @@ public class AdaptiveBot {
 				dest = notMyPlanet;
 			}
 		}
-		
+
 		if (source != null && dest != null) {
 			pw.IssueOrder(source, dest);
 		}
 	}
-	
+
 	/**
-	 * Implementation of the RandomBot strategy (copy pasted from the regular RandomBot.java)
+	 * Implementation of the RandomBot strategy (copy pasted from the regular
+	 * RandomBot.java)
+	 * 
 	 * @param pw
 	 */
 	public static void DoRandomBotTurn(PlanetWars pw) {
 
 		Random random = new Random();
-		
+
 		Planet source = null;
 		List<Planet> myPlanets = pw.MyPlanets();
-		//Randomly select source planet
+		// Randomly select source planet
 		if (myPlanets.size() > 0) {
 			Integer randomSource = random.nextInt(myPlanets.size());
 			source = myPlanets.get(randomSource);
 		}
-		
+
 		Planet dest = null;
 		List<Planet> allPlanets = pw.NotMyPlanets();
-		//Randomly select destication planets
+		// Randomly select destication planets
 		if (allPlanets.size() > 0) {
 			Integer randomTarget = random.nextInt(allPlanets.size());
 			dest = allPlanets.get(randomTarget);
@@ -123,7 +136,6 @@ public class AdaptiveBot {
 			pw.IssueOrder(source, dest);
 		}
 	}
-
 
 	public static void main(String[] args) {
 		String line = "";
@@ -153,7 +165,7 @@ public class AdaptiveBot {
 			e.printStackTrace(new PrintWriter(writer));
 			String stackTrace = writer.toString();
 			System.err.println(stackTrace);
-			System.exit(1); //just stop now. we've got a problem
+			System.exit(1); // just stop now. we've got a problem
 		}
 	}
 }

@@ -9,7 +9,9 @@ import java.util.*;
 import java.io.*;
 
 public class PlanetWars {
-	public PlanetWars(){} //just an empty constructor for cloning purposes
+	public PlanetWars() {
+	} // just an empty constructor for cloning purposes
+
 	// Constructs a PlanetWars object instance, given a string containing a
 	// description of a game state.
 	public PlanetWars(String gameStateString) {
@@ -132,24 +134,24 @@ public class PlanetWars {
 		Planet destination = planets.get(destinationPlanet);
 		double dx = source.X() - destination.X();
 		double dy = source.Y() - destination.Y();
-		return (int)Math.ceil(Math.sqrt(dx * dx + dy * dy));
+		return (int) Math.ceil(Math.sqrt(dx * dx + dy * dy));
 	}
 
 	// Sends an order to the game engine. An order is composed of a source
 	// planet number, a destination planet number, and a number of ships. A
 	// few things to keep in mind:
-	//   * you can issue many orders per turn if you like.
-	//   * the planets are numbered starting at zero, not one.
-	//   * you must own the source planet. If you break this rule, the game
-	//     engine kicks your bot out of the game instantly.
-	//   * you can't move more ships than are currently on the source planet.
-	//   * the ships will take a few turns to reach their destination. Travel
-	//     is not instant. See the Distance() function for more info.
+	// * you can issue many orders per turn if you like.
+	// * the planets are numbered starting at zero, not one.
+	// * you must own the source planet. If you break this rule, the game
+	// engine kicks your bot out of the game instantly.
+	// * you can't move more ships than are currently on the source planet.
+	// * the ships will take a few turns to reach their destination. Travel
+	// is not instant. See the Distance() function for more info.
 
-	// NOTICE: modified to always send half the number of ships on source planet.
+	// NOTICE: modified to always send half the number of ships on source
+	// planet.
 
-	public void IssueOrder(int sourcePlanet,
-			int destinationPlanet) {
+	public void IssueOrder(int sourcePlanet, int destinationPlanet) {
 		System.out.println("" + sourcePlanet + " " + destinationPlanet);
 		System.out.flush();
 	}
@@ -157,11 +159,13 @@ public class PlanetWars {
 	// Sends an order to the game engine. An order is composed of a source
 	// planet number, a destination planet number, and a number of ships. A
 	// few things to keep in mind:
-	//   * the planets are numbered starting at zero, not one.
-	//   * you must own the source planet. If you break this rule, you skip this turn
-	//   * you can't move more ships than are currently on the source planet.
+	// * the planets are numbered starting at zero, not one.
+	// * you must own the source planet. If you break this rule, you skip this
+	// turn
+	// * you can't move more ships than are currently on the source planet.
 
-	// NOTICE: modified to always send half the number of ships on source planet.
+	// NOTICE: modified to always send half the number of ships on source
+	// planet.
 
 	public void IssueOrder(Planet source, Planet dest) {
 		System.out.println("" + source.PlanetID() + " " + dest.PlanetID());
@@ -204,12 +208,12 @@ public class PlanetWars {
 			remainingPlayers.add(f.Owner());
 		}
 		switch (remainingPlayers.size()) {
-			case 0:
-				return 0;
-			case 1:
-				return ((Integer)remainingPlayers.toArray()[0]).intValue();
-			default:
-				return -1;
+		case 0:
+			return 0;
+		case 1:
+			return ((Integer) remainingPlayers.toArray()[0]).intValue();
+		default:
+			return -1;
 		}
 	}
 
@@ -259,10 +263,7 @@ public class PlanetWars {
 				int owner = Integer.parseInt(tokens[3]);
 				int numShips = Integer.parseInt(tokens[4]);
 				int growthRate = Integer.parseInt(tokens[5]);
-				Planet p = new Planet(planetID++,
-						owner,
-						numShips,
-						growthRate,
+				Planet p = new Planet(planetID++, owner, numShips, growthRate,
 						x, y);
 				planets.add(p);
 			} else if (tokens[0].equals("F")) {
@@ -275,12 +276,8 @@ public class PlanetWars {
 				int destination = Integer.parseInt(tokens[4]);
 				int totalTripLength = Integer.parseInt(tokens[5]);
 				int turnsRemaining = Integer.parseInt(tokens[6]);
-				Fleet f = new Fleet(owner,
-						numShips,
-						source,
-						destination,
-						totalTripLength,
-						turnsRemaining);
+				Fleet f = new Fleet(owner, numShips, source, destination,
+						totalTripLength, turnsRemaining);
 				fleets.add(f);
 			} else {
 				return 0;
@@ -300,7 +297,7 @@ public class PlanetWars {
 			in = new BufferedReader(new FileReader(mapFilename));
 			int c;
 			while ((c = in.read()) >= 0) {
-				s += (char)c;
+				s += (char) c;
 			}
 		} catch (Exception e) {
 			return 0;
@@ -321,18 +318,20 @@ public class PlanetWars {
 
 	public void log(Object... args) {
 		String output = "";
-		for (Object arg: args) {
+		for (Object arg : args) {
 			output += arg + " ";
 		}
 		System.err.println(output);
 	}
+
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		for (Planet p : planets) {
 			// We can't use String.format here because in certain locales, the ,
 			// and . get switched for X and Y (yet just appending them using the
 			// default toString methods apparently doesn't switch them?)
-			s.append("P " + p.X() + " " + p.Y() + " " + p.Owner() + " " + p.NumShips() + " " + p.GrowthRate() + "\n");
+			s.append("P " + p.X() + " " + p.Y() + " " + p.Owner() + " "
+					+ p.NumShips() + " " + p.GrowthRate() + "\n");
 
 		}
 		return s.toString();

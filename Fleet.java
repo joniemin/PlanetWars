@@ -1,15 +1,11 @@
 /* A fleet is a group of ships flying from one planet to the other.
 	 For Week 1 we don't need it.
-	 */
+ */
 
 public class Fleet implements Comparable, Cloneable {
 	// Initializes a fleet.
-	public Fleet(int owner,
-			int numShips,
-			int sourcePlanet,
-			int destinationPlanet,
-			int totalTripLength,
-			int turnsRemaining) {
+	public Fleet(int owner, int numShips, int sourcePlanet,
+			int destinationPlanet, int totalTripLength, int turnsRemaining) {
 		this.owner = owner;
 		this.numShips = numShips;
 		this.sourcePlanet = sourcePlanet;
@@ -19,8 +15,7 @@ public class Fleet implements Comparable, Cloneable {
 	}
 
 	// Initializes a fleet.
-	public Fleet(int owner,
-			int numShips) {
+	public Fleet(int owner, int numShips) {
 		this.owner = owner;
 		this.numShips = numShips;
 		this.sourcePlanet = -1;
@@ -34,7 +29,6 @@ public class Fleet implements Comparable, Cloneable {
 	public int Owner() {
 		return owner;
 	}
-
 
 	public int NumShips() {
 		return numShips;
@@ -71,7 +65,7 @@ public class Fleet implements Comparable, Cloneable {
 	}
 
 	public int compareTo(Object o) {
-		Fleet f = (Fleet)o;
+		Fleet f = (Fleet) o;
 		return this.numShips - f.numShips;
 	}
 
@@ -90,6 +84,7 @@ public class Fleet implements Comparable, Cloneable {
 		totalTripLength = _f.totalTripLength;
 		turnsRemaining = _f.turnsRemaining;
 	}
+
 	public Object clone() {
 		return new Fleet(this);
 	}
