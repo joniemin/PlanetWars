@@ -83,8 +83,7 @@ public class LookaheadBot {
 	 * change it to anything that makes sense, using combinations of number of
 	 * planets, ships or growth rate.
 	 * 
-	 * @param SimulatedPlanetWars
-	 *            pw
+	 * @param SimulatedPlanetWars pw
 	 * @return score of the final state of the simulation
 	 */
 	public static double evaluateState(SimulatedPlanetWars pw) {
@@ -143,8 +142,7 @@ public class LookaheadBot {
 	 * Create the simulation environment. Returns a SimulatedPlanetWars
 	 * instance. Call every time you want a new simulation environment.
 	 * 
-	 * @param The
-	 *            original PlanetWars object
+	 * @param The original PlanetWars object
 	 * @return SimulatedPlanetWars instance on which to simulate your attacks.
 	 *         Create a new one everytime you want to try alternative
 	 *         simulations.
@@ -181,8 +179,8 @@ public class LookaheadBot {
 				if (p.Owner() == 0)
 					continue;
 
-				Planet newp = new Planet(p.PlanetID(), p.Owner(), p.NumShips()
-						+ p.GrowthRate(), p.GrowthRate(), p.X(), p.Y());
+				Planet newp = new Planet(p.PlanetID(), p.Owner(), p.NumShips() + p.GrowthRate(), p.GrowthRate(), p.X(),
+						p.Y());
 
 				planets.set(p.PlanetID(), newp);
 			}
@@ -197,12 +195,10 @@ public class LookaheadBot {
 			// Simulate attack
 			if (source != null && dest != null) {
 
-				Planet newSource = new Planet(source.PlanetID(),
-						source.Owner(), source.NumShips() / 2,
+				Planet newSource = new Planet(source.PlanetID(), source.Owner(), source.NumShips() / 2,
 						source.GrowthRate(), source.X(), source.Y());
-				Planet newDest = new Planet(dest.PlanetID(), dest.Owner(),
-						Math.abs(dest.NumShips() - source.NumShips() / 2),
-						dest.GrowthRate(), dest.X(), dest.Y());
+				Planet newDest = new Planet(dest.PlanetID(), dest.Owner(), Math.abs(dest.NumShips() - source.NumShips()
+						/ 2), dest.GrowthRate(), dest.X(), dest.Y());
 
 				if (dest.NumShips() < source.NumShips() / 2) {
 					// change owner

@@ -3,6 +3,14 @@
  */
 
 public class Fleet implements Comparable, Cloneable {
+
+	private int owner;
+	private int numShips;
+	private int sourcePlanet;
+	private int destinationPlanet;
+	private int totalTripLength;
+	private int turnsRemaining;
+
 	// Initializes a fleet.
 	public Fleet(int owner, int numShips, int sourcePlanet,
 			int destinationPlanet, int totalTripLength, int turnsRemaining) {
@@ -68,13 +76,6 @@ public class Fleet implements Comparable, Cloneable {
 		Fleet f = (Fleet) o;
 		return this.numShips - f.numShips;
 	}
-
-	private int owner;
-	private int numShips;
-	private int sourcePlanet;
-	private int destinationPlanet;
-	private int totalTripLength;
-	private int turnsRemaining;
 
 	private Fleet(Fleet _f) {
 		owner = _f.owner;

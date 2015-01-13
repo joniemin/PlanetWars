@@ -1,6 +1,5 @@
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
 
 /* A bit smarter kind of bot, who searches for its strongest planet and then attacks the weakest planet.
  The score is computed based on the number of ships.

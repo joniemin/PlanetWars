@@ -9,6 +9,12 @@ import java.util.*;
 import java.io.*;
 
 public class PlanetWars {
+
+	// Store all the planets and fleets. OMG we wouldn't wanna lose all the
+	// planets and fleets, would we!?
+	private ArrayList<Planet> planets;
+	private ArrayList<Fleet> fleets;
+
 	public PlanetWars() {
 	} // just an empty constructor for cloning purposes
 
@@ -263,8 +269,7 @@ public class PlanetWars {
 				int owner = Integer.parseInt(tokens[3]);
 				int numShips = Integer.parseInt(tokens[4]);
 				int growthRate = Integer.parseInt(tokens[5]);
-				Planet p = new Planet(planetID++, owner, numShips, growthRate,
-						x, y);
+				Planet p = new Planet(planetID++, owner, numShips, growthRate, x, y);
 				planets.add(p);
 			} else if (tokens[0].equals("F")) {
 				if (tokens.length != 7) {
@@ -276,8 +281,7 @@ public class PlanetWars {
 				int destination = Integer.parseInt(tokens[4]);
 				int totalTripLength = Integer.parseInt(tokens[5]);
 				int turnsRemaining = Integer.parseInt(tokens[6]);
-				Fleet f = new Fleet(owner, numShips, source, destination,
-						totalTripLength, turnsRemaining);
+				Fleet f = new Fleet(owner, numShips, source, destination, totalTripLength, turnsRemaining);
 				fleets.add(f);
 			} else {
 				return 0;
@@ -311,11 +315,6 @@ public class PlanetWars {
 		return ParseGameState(s);
 	}
 
-	// Store all the planets and fleets. OMG we wouldn't wanna lose all the
-	// planets and fleets, would we!?
-	private ArrayList<Planet> planets;
-	private ArrayList<Fleet> fleets;
-
 	public void log(Object... args) {
 		String output = "";
 		for (Object arg : args) {
@@ -330,8 +329,7 @@ public class PlanetWars {
 			// We can't use String.format here because in certain locales, the ,
 			// and . get switched for X and Y (yet just appending them using the
 			// default toString methods apparently doesn't switch them?)
-			s.append("P " + p.X() + " " + p.Y() + " " + p.Owner() + " "
-					+ p.NumShips() + " " + p.GrowthRate() + "\n");
+			s.append("P " + p.X() + " " + p.Y() + " " + p.Owner() + " " + p.NumShips() + " " + p.GrowthRate() + "\n");
 
 		}
 		return s.toString();

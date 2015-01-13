@@ -1,4 +1,11 @@
 public class Planet implements Cloneable {
+
+	private int planetID;
+	private int owner;
+	private int numShips;
+	private int growthRate;
+	private double x, y;
+
 	// Initializes a planet.
 	public Planet(int planetID, int owner, int numShips, int growthRate,
 			double x, double y) {
@@ -53,12 +60,6 @@ public class Planet implements Cloneable {
 	public void RemoveShips(int amount) {
 		numShips -= amount;
 	}
-
-	private int planetID;
-	private int owner;
-	private int numShips;
-	private int growthRate;
-	private double x, y;
 
 	private Planet(Planet _p) {
 		planetID = _p.planetID;
