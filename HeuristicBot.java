@@ -8,28 +8,13 @@ import java.util.*;
  */
 public class HeuristicBot {
 
-	private static int PREDICTED_TURNS = 2;
+	private static int PREDICTED_TURNS = 1;
 
 	/**
 	 * Function that gets called every turn. This is where to implement the
 	 * strategies.
 	 */
 	public static void DoTurn(PlanetWars pw) {
-
-		int myShips = 0;
-		int enemyShips = 0;
-		int myGrowthRate = 0;
-		int enemyGrowthRate = 0;
-
-		for (Planet p : pw.Planets()) {
-			if (p.Owner() == 1) {
-				myShips = myShips + p.NumShips();
-				myGrowthRate = myGrowthRate + p.GrowthRate();
-			} else if (p.Owner() > 1) {
-				enemyShips = enemyShips + p.NumShips();
-				enemyGrowthRate = enemyGrowthRate + p.GrowthRate();
-			}
-		}
 
 		Planet source = null;
 		Planet dest = null;
@@ -44,9 +29,8 @@ public class HeuristicBot {
 					source = s;
 					dest = d;
 					bestScore = score;
-					pw.log("Source:", s.PlanetID(), "Dest:", d.PlanetID(), "Score:", score);
+					pw.log("Source:", s.NumShips(), "Dest:", d.NumShips(), "Score:", score);
 				}
-
 			}
 		}
 
@@ -57,30 +41,44 @@ public class HeuristicBot {
 
 	}
 
+	/**
+	 *	Calculate the the change in the difference between players 
+	 *	relative to the amount of ships caused by the attack. 
+	 *	Also take into acount the gains or losses caused by the changes in
+	 *	the growth rates.
+	 */
 	private static int score(Planet source, Planet dest) {
 		if (dest.Owner() == 1) {
-			return 0;
+			// sending ships to own planet doesn't change the amount
+			// of ships or the amount of growth rate
+			return 0; 
 		}
-		int myShipDelta = 0;
-		int enemyShipDelta = 0;
-		int myGrowthRateDelta = 0;
-		int enemyGrowthRateDelta = 0;
 
-		int attackingShips = source.NumShips() / 2;
+		int attackingShips = source.NumShips() / 2; 
+		int lostShips = Math.min(dest.NumShips(), attackingShips);
+		boolean victory = dest.NumShips() < attackingShips;
+		int growth = dest.GrowthRate() * PREDICTED_TURNS;
+		boolean neutralPlanet = dest.Owner() == 0;
 
-		if (dest.NumShips() > attackingShips) {
-			myShipDelta -= attackingShips;
-		} else {
-			myShipDelta -= dest.NumShips();
-			myGrowthRateDelta += dest.GrowthRate();
-			if (dest.Owner() > 1) {
-				enemyShipDelta -= dest.NumShips();
-				enemyGrowthRateDelta -= dest.GrowthRate();
+		int myShips = 0;
+		int myGrowth = 0;
+		int enemyShips = 0;
+		int enemyGrowth = 0;
+
+		myShips -= lostShips;
+		if (victory) {
+			myGrowth += growth;
+		}
+		if (!neutralPlanet) {
+			enemyShips -= lostShips;
+			if (victory) {
+				enemyGrowth -= growth;
 			}
 		}
 
-		int myPredictedShips = myShipDelta + (myGrowthRateDelta * PREDICTED_TURNS);
-		int predictedEnemyShips = enemyShipDelta + (enemyGrowthRateDelta * PREDICTED_TURNS);
+		int myPredictedShips = myShips + myGrowth;
+		int predictedEnemyShips = enemyShips + enemyGrowth;
+
 		return myPredictedShips - predictedEnemyShips;
 	}
 
@@ -91,20 +89,20 @@ public class HeuristicBot {
 		try {
 			while ((c = System.in.read()) >= 0) {
 				switch (c) {
-				case '\n':
-					if (line.equals("go")) {
-						PlanetWars pw = new PlanetWars(message);
-						DoTurn(pw);
-						pw.FinishTurn();
-						message = "";
-					} else {
-						message += line + "\n";
-					}
-					line = "";
-					break;
-				default:
-					line += (char) c;
-					break;
+					case '\n':
+						if (line.equals("go")) {
+							PlanetWars pw = new PlanetWars(message);
+							DoTurn(pw);
+							pw.FinishTurn();
+							message = "";
+						} else {
+							message += line + "\n";
+						}
+						line = "";
+						break;
+					default:
+						line += (char) c;
+						break;
 				}
 			}
 		} catch (Exception e) {
