@@ -3,7 +3,9 @@ package model.agents;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.*;
+import model.Action;
+import model.Problem;
+import model.State;
 import model.search.SearchStrategy;
 
 public abstract class ProblemSolvingAgent {
@@ -25,6 +27,6 @@ public abstract class ProblemSolvingAgent {
 			problem = formulateProblem(state, goal);
 			seq = searchStrategy.search(problem);
 		}
-		return seq.isEmpty() ? null : seq.remove(0);
+		return seq == null || seq.isEmpty() ? null : seq.remove(0);
 	}
 }
